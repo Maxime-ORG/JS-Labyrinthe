@@ -1,0 +1,49 @@
+*{
+    box-sizing: border-box;
+    margin :0;
+}
+
+#divCentrale {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 800px;
+    width: 800px;
+    gap: 0px;
+    margin: 0
+}
+
+.case {
+    display: flex;
+    min-height: auto;
+}
+
+.borderTop{
+    border-top: solid red 2px;
+}
+
+.borderLeft{
+    border-left: solid red 2px;
+}
+
+.borderRight{
+    border-right: solid red 2px;
+}
+
+.borderBottom{
+    border-bottom: solid red 2px;
+}
+
+.black{
+    background-color: black;
+}
+.green{
+    background-color: green;
+}
+.yellow{
+    background-color: yellow;
+}
+body {
+    margin: 0;
+}
