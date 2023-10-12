@@ -37,5 +37,17 @@ class LABYRINTHE{
         $(".case").css("height",100/Math.sqrt(this.cells.length)+"%")
         $(".case").css("width",100/Math.sqrt(this.cells.length)+"%")
     }
+
+    getEntrance(){
+        return caseEntrance = this.cells.filter(function(element){
+            return (element.entrance === true)
+        })
+    }
+
+    getExit(){
+        return caseExit = this.cells.filter(function(element){
+            return (element.exit === true)
+        })
+    }
 }
   

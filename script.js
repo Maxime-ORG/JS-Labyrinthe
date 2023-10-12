@@ -75,6 +75,7 @@ console.log ('path :',path)
 
 let MyLaby =  new LABYRINTHE (labyrinthe)
 MyLaby.display()
+console.log("entrance :", MyLaby.getEntrance(), ", exit :", MyLaby.getExit())
 console.log(MyLaby) 
 // console.log(getCellsAround(labyrinthe, labyrinthe[2], []),"cells autour de" ,labyrinthe[2])
 // console.log(MultiPossiblity(labyrinthe[1]))
