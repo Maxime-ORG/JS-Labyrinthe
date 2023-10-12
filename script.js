@@ -36,7 +36,7 @@ function caseACotee(directionX, directionY, labyrinthe, caseActuel){
     x = caseActuel.posX
     y = caseActuel.posY
     maCase = labyrinthe.filter(function(element){
-        return (element.posX == x + directionX && element.posY == y + directionY)
+        return ((element.posX == (x + directionX)) && (element.posY == (y + directionY)))
     })
     return maCase[0]
 }
@@ -74,68 +74,66 @@ function multiPossiblity(caseActuel){
 }
 
 function lastArrayElement(array){
-    return array[array.lenght]
+    return array[array.lenght-1]
 }
 
 
-function DFS(labyrinthe){
-    caseExit = labyrinthe.filter(function(element){
+function getCellsAround(labyrintheCells, cellToCheck, path){
+    let cellsAround =[]
+    if(!cellToCheck.walls[0] && !caseChecked(caseACotee(-1,0,labyrintheCells, cellToCheck),path)){
+        cellsAround.push(caseACotee(-1,0,labyrintheCells, cellToCheck))
+    } 
+    if (!cellToCheck.walls[1] && !caseChecked(caseACotee(0,1,labyrintheCells, cellToCheck),path)){
+        cellsAround.push(caseACotee(0,1,labyrintheCells, cellToCheck))
+    } 
+    if (!cellToCheck.walls[2] && !caseChecked(caseACotee(1, 0,labyrintheCells, cellToCheck),path)){
+        cellsAround.push(caseACotee(1, 0,labyrintheCells, cellToCheck))
+    } 
+    if (!cellToCheck.walls[3] && !caseChecked(caseACotee(0, -1,labyrintheCells, cellToCheck),path)){
+        cellsAround.push(caseACotee(0, -1,labyrintheCells, cellToCheck))
+    }
+    return cellsAround
+}
+
+function DFS(labyrintheDFS){
+    caseExit = labyrintheDFS.filter(function(element){
         return (element.exit)
     })
-    caseEntrance = labyrinthe.filter(function(element){
-        return (element.entrance)
+    caseEntrance = labyrintheDFS.filter(function(element){
+        return (element.entrance === true)
     })
 
     antiInfiniteLOL = 0
     caseMultiPossiblity = []
     pathActual = [caseEntrance[0]]
+    caseActual = caseEntrance[0]
+    stack = []
 
     console.log("entrance :",caseEntrance[0])
     console.log("exit :",caseExit[0])
 
-    while (antiInfiniteLOL < 100 && pathActual[pathActual.length-1]!==caseExit[0]){
-        
-        //console.log("entrée dans la boucle",pathActual)
-        if(!pathActual[pathActual.length-1].walls[0] && !caseChecked(caseACotee(-1,0,labyrinthe, pathActual[pathActual.length-1]),pathActual)){
-            pathActual.push(caseACotee(-1,0,labyrinthe, pathActual[pathActual.length-1]))
-            console.log ('HAUT, case courante après mouvement:',pathActual[pathActual.length-1])
-        } else if(!pathActual[pathActual.length-1].walls[1] && !caseChecked(caseACotee(0,1,labyrinthe, pathActual[pathActual.length-1]),pathActual) ){
-            pathActual.push(caseACotee(0,1,labyrinthe, pathActual[pathActual.length-1]))
-            console.log ('DROITE, case courante après mouvement:',pathActual[pathActual.length-1])
-        } else if(!pathActual[pathActual.length-1].walls[2] && !caseChecked(caseACotee(1,0,labyrinthe, pathActual[pathActual.length-1]),pathActual) ){
-            pathActual.push(caseACotee(1,0,labyrinthe, pathActual[pathActual.length-1]))
-            console.log ('BAS, case courante après mouvement:',pathActual[pathActual.length-1])
-        } else if(!pathActual[pathActual.length-1].walls[3] && !caseChecked(caseACotee(0,-1,labyrinthe, pathActual[pathActual.length-1]),pathActual) ){
-            pathActual.push(caseACotee(0,-1,labyrinthe, pathActual[pathActual.length-1]))
-            console.log ('GAUCHE, case courante après mouvement:',pathActual[pathActual.length-1])
-        } else {
-            if (caseMultiPossiblity[caseMultiPossiblity.length-1][1]>2){
-                pathActual.push(caseMultiPossiblity[caseMultiPossiblity.length-1][0])
-                caseMultiPossiblity[caseMultiPossiblity.length-1][1] -= 1
-            } else {
-                console.log('ma case à pop :', caseMultiPossiblity[caseMultiPossiblity.length-1])
-                caseMultiPossiblity.pop()
-            }
-            console.log ("HAHA T'ES COINCE, téléportation en :", pathActual[pathActual.length-1])
-            console.log("case multi :",caseMultiPossiblity)
-        }
-        if(multiPossiblity(pathActual[pathActual.length-1]) > 2 && !arrayMultiAlreadyExist(pathActual[pathActual.length-1],caseMultiPossiblity)){
-            caseMultiPossiblity.push([pathActual[pathActual.length-1], multiPossiblity(pathActual[pathActual.length-1])])
-        }
-
+    while (antiInfiniteLOL < 100 && caseActual!==caseExit[0]){
+        let cellsAround = getCellsAround(labyrintheDFS, caseActual, pathActual)
+        cellsAround.forEach ((element) => {
+            stack.push(element)
+        })
+        caseActual = stack[stack.length-1]
+        pathActual.push(caseActual)
+        stack.pop()
+        console.log("case actuelle :", caseActual, ", stack :", stack)
         antiInfiniteLOL +=1
     }
     return pathActual
 }
 
-lengthLaby = 5
+lengthLaby = 25
 exNum = "ex-0"
 labyrinthe = labyrinthes[lengthLaby][exNum]
 createLaby(labyrinthe, lengthLaby);
 let path = DFS (labyrinthe)
-
 console.log ('path :',path)
 
+console.log(getCellsAround(labyrinthe, labyrinthe[2], []),"cells autour de" ,labyrinthe[2])
 // console.log(MultiPossiblity(labyrinthe[1]))
 // console.log(caseACotee(1,0,labyrinthe, labyrinthe[0]))
 // console.log(caseChecked(labyrinthe[0], [labyrinthe[0], labyrinthe[2],labyrinthe[1]]))
