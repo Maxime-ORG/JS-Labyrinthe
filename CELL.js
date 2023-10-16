@@ -5,16 +5,20 @@ class CELL {
     this.walls = walls
     this.entrance = entrance
     this.exit = exit 
+    this.checked = false
   }
 
-  caseChecked(caseActuel, path){
-    caseCheck = path.filter(function(element){
-        return (element == caseActuel)
-    })
-    if (caseCheck.length == 1){
+  caseCheckedCell(){
+    if (this.checked){
         return true
     } else {
         return false
     }
+  }
+
+
+
+  test(){
+    console.log("test")
   }
 }

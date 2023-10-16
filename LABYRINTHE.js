@@ -49,5 +49,29 @@ class LABYRINTHE{
             return (element.exit === true)
         })
     }
+
+    caseACoteeLaby(directionX, directionY, caseActuel){
+        maCase = this.cells.filter(function(element){
+            return ((element.posX == (caseActuel.posX + directionX)) && (element.posY == (caseActuel.posY + directionY)))
+        })
+        return maCase[0]
+    }
+
+    getCellsAroundLaby(cellToCheck){
+        let cellsAround =[]
+        if(!cellToCheck.walls[0] && !this.caseACoteeLaby(-1,0, cellToCheck).checked){
+            cellsAround.push(this.caseACoteeLaby(-1,0, cellToCheck))
+        } 
+        if (!cellToCheck.walls[1] && !this.caseACoteeLaby(0,1, cellToCheck).checked){
+            cellsAround.push(this.caseACoteeLaby(0,1, cellToCheck))
+        } 
+        if (!cellToCheck.walls[2] && !this.caseACoteeLaby(1, 0, cellToCheck).checked){
+            cellsAround.push(this.caseACoteeLaby(1, 0, cellToCheck))
+        } 
+        if (!cellToCheck.walls[3] && !this.caseACoteeLaby(0, -1, cellToCheck).checked){
+            cellsAround.push(this.caseACoteeLaby(0, -1, cellToCheck))
+        }
+        return cellsAround
+    }
 }
   
